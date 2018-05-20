@@ -108,7 +108,7 @@ class CatController extends EGController
     {
 		Stat::setView('news', 'default', 'index');
 		
-		$this->layout = '//creative-item';
+		//$this->layout = '//creative-item';
 		Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news', 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
 		Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news', 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
         
@@ -142,7 +142,7 @@ class CatController extends EGController
     {
 		Stat::setView('news', 'default', 'view');
 
-        $this->layout = '//creative-item';
+        //$this->layout = '//creative-item';
 		Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news/cat/view', 'id'=>$id, 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
 		Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news/cat/view', 'id'=>$id, 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
 
