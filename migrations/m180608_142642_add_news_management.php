@@ -31,6 +31,20 @@ class m180608_142642_add_news_management extends Migration
 					'created_at'	=> time(),
 					'updated_at'	=> time()
 				]);
+			if (!$query->from('{{%auth_item}}')->where(['name' => '/news/translation/*'])->exists())
+				$this->insert('{{%auth_item}}', [
+					'name'			=> '/news/translation/*',
+					'type'			=> 2,
+					'created_at'	=> time(),
+					'updated_at'	=> time()
+				]);
+			if (!$query->from('{{%auth_item}}')->where(['name' => '/news/category-translation/*'])->exists())
+				$this->insert('{{%auth_item}}', [
+					'name'			=> '/news/category-translation/*',
+					'type'			=> 2,
+					'created_at'	=> time(),
+					'updated_at'	=> time()
+				]);
 			if (!$query->from('{{%auth_item}}')->where(['name' => 'news_management'])->exists())
 				$this->insert('{{%auth_item}}', [
 					'name'			=> 'news_management',
@@ -64,6 +78,16 @@ class m180608_142642_add_news_management extends Migration
 				$this->insert('{{%auth_item_child}}', [
 					'parent'	=> 'news_management',
 					'child'		=> '/news/category-admin/*'
+				]);
+			if (!$query->from('{{%auth_item_child}}')->where(['parent' => 'news_management', 'child' => '/news/translation/*'])->exists())
+				$this->insert('{{%auth_item_child}}', [
+					'parent'	=> 'news_management',
+					'child'		=> '/news/translation/*'
+				]);
+			if (!$query->from('{{%auth_item_child}}')->where(['parent' => 'news_management', 'child' => '/news/category-translation/*'])->exists())
+				$this->insert('{{%auth_item_child}}', [
+					'parent'	=> 'news_management',
+					'child'		=> '/news/category-translation/*'
 				]);
 			if (!$query->from('{{%auth_item_child}}')->where(['parent' => 'news_manager', 'child' => 'news_management'])->exists())
 				$this->insert('{{%auth_item_child}}', [
