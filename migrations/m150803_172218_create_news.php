@@ -47,178 +47,78 @@ class m150803_172218_create_news extends Migration
         $this->addForeignKey('fk_eg_news_translation', '{{%eg_news_translation}}', 'news_id', '{{%eg_news}}', 'id', 'RESTRICT', 'CASCADE');
 
         $this->insert('{{%eg_news_category}}', [
+			'id' => 1,
             'name' => 'عمومی',
+			'status' => 1,
         ]);
         $this->insert('{{%eg_news_category_translation}}', [
             'cat_id' => 1,
             'language' => 'fa-IR',
             'title' => 'عمومی',
         ]);
+        $this->insert('{{%eg_news_category_translation}}', [
+            'cat_id' => 1,
+            'language' => 'en-US',
+            'title' => 'public',
+        ]);
         $this->insert('{{%eg_news}}', [
+			'id' => 1,
             'category_id' => 1,
             'thumb' => 'news-1.png',
-            'archive_time' => 1467629406,
-            'creation_time' => 1467629406,
-            'update_time' => 1467629406,
+            'archive_time' => time() + 108000,
+            'creation_time' => time(),
+            'update_time' => time(),
             'author_id' => 1,
             'status' => 1,
         ]);
         $this->insert('{{%eg_news}}', [
+			'id' => 2,
             'category_id' => 1,
             'thumb' => 'news-2.png',
-            'archive_time' => 1467629406,
-            'creation_time' => 1467629406,
-            'update_time' => 1467629406,
+            'archive_time' => time() + 108000,
+            'creation_time' => time(),
+            'update_time' => time(),
             'author_id' => 1,
             'status' => 1,
         ]);
         $this->insert('{{%eg_news}}', [
+			'id' => 3,
             'category_id' => 1,
             'thumb' => 'news-3.png',
-            'archive_time' => 1467629406,
-            'creation_time' => 1467629406,
-            'update_time' => 1467629406,
+            'archive_time' => time() + 108000,
+            'creation_time' => time(),
+            'update_time' => time(),
             'author_id' => 1,
             'status' => 1,
         ]);
         $this->insert('{{%eg_news_translation}}', [
             'news_id' => 1,
             'language' => 'fa-IR',
-            'title' => 'بروزرسانی فریمورک کلید',
-            'subtitle' => 'اعمال آخرین تغییرات بر روی پلت فرم ',
-            'intro' => 'آخرین تغییرات بر روی پلت فرم اعمال شد',
-            'description' => '<p>فریمورک کلید بروز شد و آخرین تغییرات بر روی پلت فرم اعمال شد .&nbsp;<br />منتظر تغییرات بعدی باشید ...</p>',
+            'title' => 'ساخت اولین نسخه eg-cms',
+            'subtitle' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد.',
+            'intro' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد. پلاگین هایی مانند تاریخ و تقویم فارسی تچندزبانی, اخبار، بلاگ و ... به رایگان در دسترس هستند',
+            'description' => '<p>سورس کد برنامه در <a href="https://github.com/ElephantsGroup/eg-cms">گیت هاب</a> موجود است. این بسته بر پایه ی Yii2 ساخته شده است. اطلاعات بیشتر را می توانید در <a href="http://elephantsgroup.com">وب سایت ما</a> بیابید.</p>',
         ]);
         $this->insert('{{%eg_news_translation}}', [
             'news_id' => 2,
             'language' => 'fa-IR',
-            'title' => 'بروزرسانی فریمورک کلید',
-            'subtitle' => 'اعمال آخرین تغییرات بر روی پلت فرم ',
-            'intro' => 'آخرین تغییرات بر روی پلت فرم اعمال شد',
-            'description' => '<p>فریمورک کلید بروز شد و آخرین تغییرات بر روی پلت فرم اعمال شد .&nbsp;<br />منتظر تغییرات بعدی باشید ...</p>',
+            'title' => 'ساخت اولین نسخه eg-cms',
+            'subtitle' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد.',
+            'intro' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد. پلاگین هایی مانند تاریخ و تقویم فارسی تچندزبانی, اخبار، بلاگ و ... به رایگان در دسترس هستند',
+            'description' => '<p>سورس کد برنامه در <a href="https://github.com/ElephantsGroup/eg-cms">گیت هاب</a> موجود است. این بسته بر پایه ی Yii2 ساخته شده است. اطلاعات بیشتر را می توانید در <a href="http://elephantsgroup.com">وب سایت ما</a> بیابید.</p>',
         ]);
         $this->insert('{{%eg_news_translation}}', [
             'news_id' => 3,
             'language' => 'fa-IR',
-            'title' => 'بروزرسانی فریمورک کلید',
-            'subtitle' => 'اعمال آخرین تغییرات بر روی پلت فرم ',
-            'intro' => 'آخرین تغییرات بر روی پلت فرم اعمال شد',
-            'description' => '<p>فریمورک کلید بروز شد و آخرین تغییرات بر روی پلت فرم اعمال شد .&nbsp;<br />منتظر تغییرات بعدی باشید ...</p>',
-        ]);
-
-        $this->insert('{{%auth_item}}', [
-            'name' => '/news/admin/*',
-            'type' => 2,
-            'created_at' => 1467629406,
-            'updated_at' => 1467629406
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name' => '/news/category-admin/*',
-            'type' => 2,
-            'created_at' => 1467629406,
-            'updated_at' => 1467629406
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name' => '/news/translation/*',
-            'type' => 2,
-            'created_at' => 1467629406,
-            'updated_at' => 1467629406
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name' => '/news/category-translation/*',
-            'type' => 2,
-            'created_at' => 1467629406,
-            'updated_at' => 1467629406
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name' => 'news_management',
-            'type' => 2,
-            'created_at' => 1467629406,
-            'updated_at' => 1467629406
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/admin/*',
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/category-translation/*',
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/translation/*',
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/category-admin/*',
-        ]);
-        $this->insert('{{%auth_item}}', [
-            'name' => 'news_manager',
-            'type' => 1,
-            'created_at' => 1467629406,
-            'updated_at' => 1467629406
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent' => 'news_manager',
-            'child' => 'news_management',
-        ]);
-        $this->insert('{{%auth_item_child}}', [
-            'parent' => 'super_admin',
-            'child' => 'news_manager',
+            'title' => 'ساخت اولین نسخه eg-cms',
+            'subtitle' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد.',
+            'intro' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد. پلاگین هایی مانند تاریخ و تقویم فارسی تچندزبانی, اخبار، بلاگ و ... به رایگان در دسترس هستند',
+            'description' => '<p>سورس کد برنامه در <a href="https://github.com/ElephantsGroup/eg-cms">گیت هاب</a> موجود است. این بسته بر پایه ی Yii2 ساخته شده است. اطلاعات بیشتر را می توانید در <a href="http://elephantsgroup.com">وب سایت ما</a> بیابید.</p>',
         ]);
     }
 
     public function safeDown()
     {
-        $this->delete('{{%auth_item_child}}', [
-            'parent' => 'super_admin',
-            'child' => 'news_manager',
-        ]);
-        $this->delete('{{%auth_item_child}}', [
-            'parent' => 'news_manager',
-            'child' => 'news_management',
-        ]);
-        $this->delete('{{%auth_item}}', [
-            'name' => 'news_manager',
-            'type' => 1,
-        ]);
-        $this->delete('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/category-translation/*',
-        ]);
-        $this->delete('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/translation/*',
-        ]);
-        $this->delete('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/category-admin/*',
-        ]);
-        $this->delete('{{%auth_item_child}}', [
-            'parent' => 'news_management',
-            'child' => '/news/admin/*',
-        ]);
-        $this->delete('{{%auth_item}}', [
-            'name' => 'news_management',
-            'type' => 2,
-        ]);
-        $this->delete('{{%auth_item}}', [
-            'name' => '/news/category-admin/*',
-            'type' => 2,
-        ]);
-        $this->delete('{{%auth_item}}', [
-            'name' => '/news/admin/*',
-            'type' => 2,
-        ]);
-        $this->delete('{{%auth_item}}', [
-            'name' => '/news/category-translation/*',
-            'type' => 2,
-        ]);
-        $this->delete('{{%auth_item}}', [
-            'name' => '/news/translation/*',
-            'type' => 2,
-        ]);
-
         $this->dropForeignKey('fk_eg_news_translation', '{{%eg_news_translation}}');
         $this->dropTable('{{%eg_news_translation}}');
         $this->dropForeignKey('fk_eg_news_category', '{{%eg_news}}');
