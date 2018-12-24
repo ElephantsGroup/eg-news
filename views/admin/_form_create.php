@@ -2,6 +2,7 @@
 use elephantsGroup\news\models\NewsCategory;
 use elephantsGroup\news\models\NewsCategoryTranslation;
 use elephantsGroup\news\models\News;
+use elephantsGroup\jDate;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;

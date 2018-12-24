@@ -111,7 +111,7 @@ class AdminController extends EGController
         $model = new News();
         $translation = new NewsTranslation();
 
-		date_default_timezone_set('Iran'); 
+		date_default_timezone_set('Iran');
 
         if ($model->load(Yii::$app->request->post()))
 		{
@@ -127,6 +127,10 @@ class AdminController extends EGController
 				$hour += 12;
 			$date = new \DateTime();
 			$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
+
+			$max_ID = News::find()->max('id');
+			$model->id = $max_ID+1;
+			$model->version = 1;
 			$model->archive_time = $date->format('Y-m-d H:i:s');
 			$model->author_id = (int) Yii::$app->user->id;
 			$model->image_file = UploadedFile::getInstance($model, 'image_file');
@@ -136,9 +140,15 @@ class AdminController extends EGController
 				if ($translation->load(Yii::$app->request->post()))
 				{
 					$translation->news_id = $model->id;
+					$translation->version = $model->version;
 					$translation->language = $this->language;
+					$translation->title = trim($translation->title);
+					$translation->subtitle = trim($translation->subtitle);
+					$translation->intro = trim($translation->intro);
+					$translation->description = trim($translation->description);
+
 					if($translation->save())
-						return $this->redirect(['view', 'id' => $model->id]);					
+						return $this->redirect(['view', 'id' => $model->id]);
 				}
 			}
         }
@@ -163,57 +173,66 @@ class AdminController extends EGController
 		$_SESSION['KCFINDER']['uploadURL'] = News::$upload_url .'images/';
 		$_SESSION['KCFINDER']['uploadDir'] = News::$upload_path . 'images/';
 
-        $model = $this->findModel($id);
-        $translation = NewsTranslation::findOne(array('news_id' => $id, 'language' => $this->language));
+		$max_version = News::find()->where(['id' => $id])->max('version');
+        $news_previous_version = News::findOne(array('id' => $id, 'version' => $max_version));
+				//var_dump($news_previous_version->attributes); die;
+		$model = new News();
 
-		date_default_timezone_set('Iran'); 
+		$max_version_translation = NewsTranslation::find()->where(['news_id' => $id, 'language' => $this->language])->max('version');
+        $translation_previous_version = NewsTranslation::findOne(array('news_id' => $id, 'language' => $this->language, 'version' => $max_version_translation));
+		$translation = new NewsTranslation();
 
-		$timestamp = (new \DateTime($model->archive_time))->getTimestamp();
-		$hour = Jdf::jdate('h', $timestamp, '', 'Iran', 'en');
-		$minute = Jdf::jdate('i', $timestamp, '', 'Iran', 'en');
-		$second = Jdf::jdate('s', $timestamp, '', 'Iran', 'en');
-		$type = 'AM';
-		$model->archive_time_time = $hour . ':' . $minute . ':' . $second . ' ' . $type;
-		$model->archive_time = Jdf::jdate('Y/m/d', $timestamp, '', 'Iran', 'en');
-
-		if ($model->load(Yii::$app->request->post()))
+		if ($model->load(Yii::$app->request->post()) && $translation->load(Yii::$app->request->post()))
 		{
-			$datetime = $model->archive_time;
-			$time = $model->archive_time_time;
-			$year = (int)(substr($datetime, 0, 4));
-			$month = (int)(substr($datetime, 5, 2));
-			$day = (int)(substr($datetime, 8, 2));
-			$hour = (int)(substr($time, 0, 2));
-			$minute = (int)(substr($time, 3, 2));
-			$second = (int)(substr($time, 6, 2));
-			if(substr($time, 9, 2) == 'PM')
-				$hour += 12;
-			$date = new \DateTime();
-			$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
-			$model->archive_time = $date->format('Y-m-d H:i:s');
-			$model->author_id = (int) Yii::$app->user->id;
+			$model->id = $id;
+			$model->version = $max_version;
+      $model->image_file = UploadedFile::getInstance($model, 'image_file');
 
-			$model->image_file = UploadedFile::getInstance($model, 'image_file');
+      //var_dump($model->image_file);die;
+			if($model->image_file == null || empty($model->image_file))
+				$model->thumb = $news_previous_version->thumb;
 
-			if($model->save())
+			$translation->news_id = $model->id;
+			$translation->language = $this->language;
+			$translation->version = $max_version_translation;
+			$translation->title = trim($translation->title);
+			$translation->subtitle = trim($translation->subtitle);
+			$translation->intro = trim($translation->intro);
+			$translation->description = trim($translation->description);
+
+			$news_changed = !($model->attributes == $news_previous_version->attributes);
+			$translation_changed = !($translation->attributes == $translation_previous_version->attributes);
+
+			if(!$news_changed && !$translation_changed)
 			{
-				if ($translation && $translation->load(Yii::$app->request->post()))
+				return $this->redirect(['view', 'id' => $model->id]);
+			}
+			else
+			{
+				$model->version = $max_version + 1;
+				if($model->save())
 				{
-					if(!$translation->title && !$translation->subtitle && !$translation->intro && !$translation->description)
+					$news_previous_version->updateAttributes (['status' => News::$_STATUS_EDITED]) ;
+					if($translation_changed)
+					{
+						if(!$translation->title && !$translation->subtitle && !$translation->intro && !$translation->description)
+							return $this->redirect(['view', 'id' => $model->id]);
+						$translation->version = $model->version;
+						if($translation->save())
+							return $this->redirect(['view', 'id' => $model->id]);
+					}
+					else
+					{
 						return $this->redirect(['view', 'id' => $model->id]);
-					$translation->news_id = $model->id;
-					$translation->language = $this->language;
-					if($translation->save())
-						return $this->redirect(['view', 'id' => $model->id]);					
+					}
 				}
-				return $this->redirect(['view', 'id' => $model->id]);					
 			}
         }
 		else
 		{
             return $this->render('update', [
-                'model' => $model,
-				'translation' => $translation,
+                'model' => $news_previous_version,
+				'translation' => $translation_previous_version,
             ]);
         }
     }
@@ -226,8 +245,12 @@ class AdminController extends EGController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+		$news_version = NewsTranslation::find()->select('version')->where(['news_id' => $id])->all();
+		foreach($news_version as $version)
+		{
+			foreach($this->findModels($id, $version) as $model)
+				$model->delete();
+		}
         return $this->redirect(['index']);
     }
 
@@ -243,6 +266,18 @@ class AdminController extends EGController
         if (($model = News::findOne($id)) !== null) {
             return $model;
         } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+	protected function findModels($id, $version)
+    {
+        if (($model = News::find()->where(['id' => $id, 'version' => $version])->all()) !== null)
+		{
+            return $model;
+        }
+		else
+		{
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

@@ -45,7 +45,7 @@ class NewsSearch extends News
     {
 		$module = \Yii::$app->getModule('base');
 
-        $query = News::find();
+        $query = News::find()->notEdited();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -54,6 +54,7 @@ class NewsSearch extends News
 		$dataProvider->setSort([
 			'attributes' => [
 				'id',
+				'version',
 				'category_id',
 				'views',
 				'author_id',

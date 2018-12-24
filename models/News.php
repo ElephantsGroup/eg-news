@@ -8,7 +8,8 @@ use yii\db\ActiveQuery;
 /**
  * This is the model class for table "basic3aug_news".
  *
- * @property integer id
+ * @property integer $id
+ * @property integer $version
  * @property integer $category_id
  * @property string $creation_time
  * @property string $update_time
@@ -25,15 +26,16 @@ class News extends \yii\db\ActiveRecord
 {
 	public $image_file;
 	public $archive_time_time;
-	
+
 	public static $upload_url;
     public static $upload_path;
-    
+
 	public static $_STATUS_SUBMITTED = 0;
 	public static $_STATUS_CONFIRMED = 1;
 	public static $_STATUS_REJECTED = 2;
     public static $_STATUS_ARCHIVED = 3;
-	
+    public static $_STATUS_EDITED = 4;
+
 	public function init()
     {
         self::$upload_path = str_replace('/backend', '', Yii::getAlias('@webroot')) . '/uploads/eg-news/news/';
@@ -49,6 +51,7 @@ class News extends \yii\db\ActiveRecord
 			self::$_STATUS_CONFIRMED => $module::t('Confirmed'),
 			self::$_STATUS_REJECTED => $module::t('Rejected'),
 			self::$_STATUS_ARCHIVED => $module::t('Archived'),
+			self::$_STATUS_EDITED => $module::t('Edited'),
 		);
 		//return [$_SUBMITTED,$_CONFIRMED,$_REJECTED,$_ARCHIVED];
 	}
@@ -56,7 +59,7 @@ class News extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-	
+
 	public static function tableName()
     {
         return '{{%eg_news}}';
@@ -68,10 +71,10 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'views', 'author_id', 'status'], 'integer'],
+            [['id', 'version', 'category_id', 'views', 'author_id', 'status'], 'integer'],
             [['creation_time', 'update_time', 'archive_time'], 'date', 'format'=>'php:Y-m-d H:i:s'],
             [['image_file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false],
-            [['category_id'], 'required'],
+            [['id', 'version', 'category_id'], 'required'],
             [['archive_time_time'], 'string', 'max' => 11],
             [['thumb'], 'default', 'value'=>'default.png'],
 			[['status'], 'default', 'value' => self::$_STATUS_SUBMITTED],
@@ -89,6 +92,7 @@ class News extends \yii\db\ActiveRecord
 		$module = \Yii::$app->getModule('base');
         return [
             'id' => $module::t('ID'),
+            'version' => $module::t('Version'),
             'category_id' => $module::t('Category ID'),
             'creation_time' => $module::t('Creation Time'),
             'update_time' => $module::t('Update Time'),
@@ -122,14 +126,19 @@ class News extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+	public function getVersions()
+    {
+        return NewsTranslation::find()->select('version')->where(['news_id'=>$this->id])->all();
+    }
+
     public function getTranslations()
     {
-        return $this->hasMany(NewsTranslation::className(), ['news_id' => 'id']);
+        return $this->hasMany(NewsTranslation::className(), ['news_id' => 'id', 'version' => 'version']);
     }
 
     public function getTranslationByLang()
     {
-        return $this->hasOne(NewsTranslation::className(), ['news_id' => 'id'])->where('language = :language', [':language' => Yii::$app->controller->language]);
+        return $this->hasOne(NewsTranslation::className(), ['news_id' => 'id', 'version' => 'version'])->where('language = :language', [':language' => Yii::$app->controller->language]);
     }
 
 	public static function find()
@@ -147,24 +156,25 @@ class News extends \yii\db\ActiveRecord
 			$this->creation_time = $date->format('Y-m-d H:i:s');
 		return parent::beforeSave($insert);
 	}
-	
+
 	public function afterSave($insert, $changedAttributes)
     {
+//			var_dump( $this->version);die;
         if($this->image_file)
         {
-			$dir = self::$upload_path . $this->id . '/';
-			if(!file_exists($dir))
-				mkdir($dir, 0777, true);
-            $file_name = 'news-' . $this->id . '.' . $this->image_file->extension;
-            $this->image_file->saveAs($dir . $file_name);
-            $this->updateAttributes(['thumb' => $file_name]);
-        }
+					$dir = self::$upload_path . $this->id . '/';
+					if(!file_exists($dir))
+						mkdir($dir, 0777, true);
+		            $file_name = 'news-' . $this->id . '-' . $this->version . '.' . $this->image_file->extension;
+		            $this->image_file->saveAs($dir . $file_name);
+		            $this->updateAttributes(['thumb' => $file_name]);
+		     }
         return parent::afterSave($insert, $changedAttributes);
     }
 
 	public function beforeDelete()
 	{
-		foreach($this->newsTranslations as $newsTranslations)
+		foreach($this->translations as $newsTranslations)
 			$newsTranslations->delete();
 
 		if($this->thumb != 'default.png')
@@ -187,5 +197,10 @@ class NewsQuery extends ActiveQuery
     public function confirmed()
     {
         return $this->andWhere(['status' => News::$_STATUS_CONFIRMED]);
+    }
+
+	public function notEdited()
+    {
+        return $this->andWhere(['!=', 'status', News::$_STATUS_EDITED]);
     }
 }

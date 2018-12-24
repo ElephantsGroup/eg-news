@@ -18,7 +18,7 @@ class NewsTranslationSearch extends NewsTranslation
     public function rules()
     {
         return [
-            [['news_id'], 'integer'],
+            [['news_id', 'version'], 'integer'],
             [['language', 'title', 'subtitle', 'intro', 'description'], 'safe'],
         ];
     }
@@ -57,6 +57,7 @@ class NewsTranslationSearch extends NewsTranslation
 
         $query->andFilterWhere([
             'news_id' => $this->news_id,
+            'version' => $this->version,
         ]);
 
         $query->andFilterWhere(['like', 'language', $this->language])

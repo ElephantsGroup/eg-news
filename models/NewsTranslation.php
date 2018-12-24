@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "basic3aug_news_translation".
  *
  * @property integer $news_id
+ * @property integer $version
  * @property string $language
  * @property string $title
  * @property string $subtitle
@@ -33,8 +34,8 @@ class NewsTranslation extends \yii\db\ActiveRecord
     {
 		$module_base = \Yii::$app->getModule('base');
         return [
-            [['news_id', 'language'], 'required'],
-            [['news_id'], 'integer'],
+            [['news_id', 'version', 'language'], 'required'],
+            [['news_id', 'version'], 'integer'],
             [['intro', 'description'], 'string'],
             [['language'], 'string', 'max' => 5],
             [['title', 'subtitle'], 'string', 'max' => 255],
@@ -53,6 +54,7 @@ class NewsTranslation extends \yii\db\ActiveRecord
 		$module_news = \Yii::$app->getModule('news');
         return [
             'news_id' => $module_news::t('news', 'News id'),
+            'version' => $module_news::t('news', 'Version'),
             'language' => $module_base::t('Language'),
             'title' => $module_base::t('Title'),
             'subtitle' => $module_base::t('Subtitle'),
@@ -66,6 +68,6 @@ class NewsTranslation extends \yii\db\ActiveRecord
      */
     public function getNews()
     {
-        return $this->hasOne(News::className(), ['id' => 'news_id']);
+        return $this->hasOne(News::className(), ['id' => 'news_id', 'version' => 'version']);
     }
 }

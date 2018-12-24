@@ -49,7 +49,9 @@ use kartik\time\TimePicker;
 
     <?= $form->field($model, 'author_id')->dropDownList(ArrayHelper::map(User::find()->all(), 'id', 'username')) ?>
 
-    <?= $form->field($model, 'status')->dropDownList(News::getStatus(), ['prompt' => $base_module::t('Select Status ...')]) ?>
+    <?php
+    //$form->field($model, 'status')->dropDownList(News::getStatus(), ['prompt' => $base_module::t('Select Status ...')])
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('news', 'Create') : Yii::t('news', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

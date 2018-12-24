@@ -35,18 +35,20 @@ use kartik\time\TimePicker;
     <?= $form->field($model, 'image_file')->label('')->fileInput() ?>
 
     <?= $form->field($model, 'creation_time')->widget(jDate\DatePicker::className()) ?>
-	
+
     <?= $form->field($model, 'update_time')->widget(jDate\DatePicker::className()) ?>
-	
+
     <?= $form->field($model, 'archive_time')->widget(jDate\DatePicker::className()) ?>
-	
+
 	<?= $form->field($model, 'archive_time_time')->label('')->widget(TimePicker::className(), ['value' => $model->archive_time_time, 'pluginOptions' => ['showSeconds' => true]]) ?>
 
     <?= $form->field($model, 'views')->textInput() ?>
 
     <?= $form->field($model, 'author_id')->dropDownList(ArrayHelper::map(User::find()->all(), 'id', 'username')) ?>
 
-    <?= $form->field($model, 'status')->dropDownList(News::getStatus(), ['prompt' => Yii::t('app', 'Select Status ...')]) ?>
+    <?php
+    //$form->field($model, 'status')->dropDownList(News::getStatus(), ['prompt' => Yii::t('app', 'Select Status ...')])
+    ?>
 
     <?= $form->field($translation, 'title')->textInput(['maxlength' => true]) ?>
 
@@ -63,7 +65,7 @@ use kartik\time\TimePicker;
 			'filebrowserBrowseUrl' => Yii::getAlias('@web') . '/kcfinder/browse.php?type=files',
 			'filebrowserUploadUrl' => Yii::getAlias('@web') . '/kcfinder/upload.php?type=files',
 		],
-	]); 
+	]);
 	?>
 
     <div class="form-group">
