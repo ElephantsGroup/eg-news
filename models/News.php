@@ -28,13 +28,13 @@ class News extends \yii\db\ActiveRecord
 	public $archive_time_time;
 
 	public static $upload_url;
-    public static $upload_path;
+  public static $upload_path;
 
 	public static $_STATUS_SUBMITTED = 0;
 	public static $_STATUS_CONFIRMED = 1;
 	public static $_STATUS_REJECTED = 2;
-    public static $_STATUS_ARCHIVED = 3;
-    public static $_STATUS_EDITED = 4;
+  public static $_STATUS_ARCHIVED = 3;
+  public static $_STATUS_EDITED = 4;
 
 	public function init()
     {
@@ -184,6 +184,58 @@ class News extends \yii\db\ActiveRecord
 				unlink($file_path);
 		}
 		return parent::beforeDelete();
+	}
+
+	public function getCanBeConfirmed()
+	{
+		return (($this->status == self::$_STATUS_SUBMITTED || $this->status == self::$_STATUS_ARCHIVED || $this->status == self::$_STATUS_REJECTED)
+			&& Yii::$app->user &&(Yii::$app->user->identity->isAdmin || Yii::$app->user->id == $this->author_id)
+		);
+	}
+
+	public function Confirm()
+	{
+		if($this->getCanBeConfirmed())
+		{
+			$this->updateAttributes(['status' => self::$_STATUS_CONFIRMED]);
+			return true;
+		}
+		return false;
+	}
+
+	public function getCanBeRejected()
+	{
+		return (($this->status == self::$_STATUS_SUBMITTED || $this->status == self::$_STATUS_CONFIRMED || $this->status == self::$_STATUS_ARCHIVED)
+			&& Yii::$app->user &&(Yii::$app->user->identity->isAdmin || Yii::$app->user->id == $this->author_id)
+		);
+	}
+
+	public function Reject()
+	{
+		if($this->getCanBeRejected())
+		{
+			$this->updateAttributes(['status' => self::$_STATUS_REJECTED]);
+			return true;
+		}
+		return false;
+	}
+
+	public function getCanBeArchived()
+	{
+		//TODO : Check date for archive.
+		return (($this->status == self::$_STATUS_SUBMITTED || $this->status == self::$_STATUS_CONFIRMED || $this->status == self::$_STATUS_REJECTED)
+			&& Yii::$app->user &&(Yii::$app->user->identity->isAdmin || Yii::$app->user->id == $this->author_id)
+		);
+	}
+
+	public function Archive()
+	{
+		if($this->getCanBeArchived())
+		{
+			$this->updateAttributes(['status' => self::$_STATUS_ARCHIVED]);
+			return true;
+		}
+		return false;
 	}
 }
 

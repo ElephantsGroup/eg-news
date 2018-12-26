@@ -272,6 +272,144 @@ class AdminController extends EGController
 		return $this->redirect(['index']);
 	}
 
+
+	  public function actionConfirm($id)
+	  {
+	    $news_module = Yii::$app->getModule('news');
+	    $response = [
+				'status' => 500,
+				'message' => $news_module::t('news', 'Server problem')
+			];
+			try
+			{
+				$news = $this->findModelMaxVersion($id);
+				if (!$news)
+				{
+					$response = [
+						'status' => 500,
+						'message' => $news_module::t('news', 'News Not Found.')
+					];
+				}
+
+				//var_dump($id); die;
+				if ($news->confirm())
+				{
+					$response = [
+						'status' => 200,
+						'message' => $news_module::t('news', 'Successful')
+					];
+				}
+				else
+				{
+					$response = [
+						'status' => 500,
+						'message' => $news_module::t('news', 'cant set to confirm')
+					];
+				}
+			}
+			catch (Exception $exp)
+			{
+				$response = [
+					'status' => 500,
+					'message' => $news_module::t('news', $exp)
+				];
+			}
+
+			//return json_encode($response);
+		return $this->redirect(['index']);
+	  }
+
+		public function actionReject($id)
+	  {
+	    $news_module = Yii::$app->getModule('news');
+	    $response = [
+				'status' => 500,
+				'message' => $news_module::t('news', 'Server problem')
+			];
+			try
+			{
+				$news = $this->findModelMaxVersion($id);
+				if (!$news)
+				{
+					$response = [
+						'status' => 500,
+						'message' => $news_module::t('news', 'News Not Found.')
+					];
+				}
+
+				if ($news->reject())
+				{
+					//var_dump($id); die;
+					$response = [
+						'status' => 200,
+						'message' => $news_module::t('news', 'Successful')
+					];
+				}
+				else
+				{
+					$response = [
+						'status' => 500,
+						'message' => $news_module::t('news', 'cant set to reject')
+					];
+				}
+			}
+			catch (Exception $exp)
+			{
+				$response = [
+					'status' => 500,
+					'message' => $news_module::t('news', $exp)
+				];
+			}
+
+			//return json_encode($response);
+			return $this->redirect(['index']);
+	  }
+
+		public function actionArchive($id)
+		{
+			$news_module = Yii::$app->getModule('news');
+			$response = [
+				'status' => 500,
+				'message' => $news_module::t('news', 'Server problem')
+			];
+			try
+			{
+				$news = $this->findModelMaxVersion($id);
+				if (!$news)
+				{
+					$response = [
+						'status' => 500,
+						'message' => $news_module::t('news', 'News Not Found.')
+					];
+				}
+
+				if ($news->archive())
+				{
+					//var_dump($id); die;
+					$response = [
+						'status' => 200,
+						'message' => $news_module::t('news', 'Successful')
+					];
+				}
+				else
+				{
+					$response = [
+						'status' => 500,
+						'message' => $news_module::t('news', 'cant set to archive')
+					];
+				}
+			}
+			catch (Exception $exp)
+			{
+				$response = [
+					'status' => 500,
+					'message' => $news_module::t('news', $exp)
+				];
+			}
+
+			//return json_encode($response);
+			return $this->redirect(['index']);
+		}
 	/**
 	 * Finds the News model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.

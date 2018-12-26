@@ -100,13 +100,39 @@ $this->params['breadcrumbs'][] = $module::t('news', 'News List');
 			//'sortable' => true,
 			'value' => function ($model) { return User::findOne($model->author_id)->username; },
 		],
-		[
-			'attribute' => 'status',
+    [
+      'attribute' => 'status',
 			'format' => 'raw',
 			'filter' => News::getStatus(),
 			//'label' => Yii::t('user', 'Role'),
 			//'sortable' => true,
 			'value' => function ($model) { return News::getStatus()[$model->status]; },
+		],
+		[
+			'format' => 'raw',
+			'label' => Yii::t('news', 'Change Status'),
+		  'value' => function ($model) use($module)  {
+  				if ( $model->status == News::$_STATUS_SUBMITTED)
+          {
+            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id]) .
+            '/' . Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id]));
+          }
+          elseif ($model->status == News::$_STATUS_CONFIRMED)
+          {
+            return(Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id]) .
+            '/' . Html::a($module::t('news', 'Archive'), ['/news/admin/archive', 'id'=>$model->id]));
+          }
+          elseif ($model->status == News::$_STATUS_REJECTED)
+          {
+            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id]) .
+            '/' . Html::a($module::t('news', 'Archive'), ['/news/admin/archive', 'id'=>$model->id]));
+          }
+          else
+          {
+            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id]) .
+            '/' . Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id]));
+          }
+			},
 		],
 		/*[
             'attribute' => 'creation_time',
@@ -155,7 +181,7 @@ $this->params['breadcrumbs'][] = $module::t('news', 'News List');
 					$url = ['/news/admin/delete', 'id'=>$model->id, 'lang'=>Yii::$app->controller->language];
 					$options = [
 						'title' => Yii::t('yii', 'Delete'),
-						'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
 						'data-method' => 'post'
 					];
 					return Html::a($label, $url, $options);
