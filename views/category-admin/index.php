@@ -35,9 +35,9 @@ $this->params['breadcrumbs'][] = Yii::t('news', 'News Categories');
 			'value' => function ($model) use($module, $module_base, $item)  {
 				return (
 				NewsCategoryTranslation::findOne(['cat_id'=>$model->id, 'language'=>$item])
-					? Html::a(Yii::t('news', 'Edit'), ['/news/category-translation/update', 'cat_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language]) .
-					' / ' . Html::a(Yii::t('news', 'Delete'), ['/news/category-translation/delete', 'cat_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language])
-					: Html::a(Yii::t('news', 'Create'), ['/news/category-translation/create', 'cat_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language])
+					? Html::a(Yii::t('news', 'Edit'), ['/news/category-translation/update', 'cat_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=>Yii::$app->request->url]) .
+					' / ' . Html::a(Yii::t('news', 'Delete'), ['/news/category-translation/delete', 'cat_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=>Yii::$app->request->url])
+					: Html::a(Yii::t('news', 'Create'), ['/news/category-translation/create', 'cat_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=>Yii::$app->request->url])
 				);
 			},
 		];
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = Yii::t('news', 'News Categories');
 				'delete' => function ($url, $model)
 				{
 					$label = '<span class="glyphicon glyphicon-trash"></span>';
-					$url = ['/news/category-admin/delete', 'id'=>$model->id, 'lang'=>Yii::$app->controller->language];
+					$url = ['/news/category-admin/delete', 'id'=>$model->id, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=>Yii::$app->request->url];
 					$options = [
 						'title' => Yii::t('yii', 'Delete'),
 						'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),

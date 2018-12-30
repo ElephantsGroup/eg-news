@@ -22,12 +22,12 @@ class AdminController extends EGController
 	public function behaviors()
 	{
 		$behaviors = [];
-		$behaviors['verbs'] = [
+		/*$behaviors['verbs'] = [
 			'class' => VerbFilter::className(),
 			'actions' => [
 				'delete' => ['post'],
 			],
-		];
+		];*/
 		/*$auth = Yii::$app->getAuthManager();
 		if ($auth)
 		{
@@ -261,7 +261,7 @@ class AdminController extends EGController
 	 * @param integer $id
 	 * @return mixed
 	 */
-	public function actionDelete($id)
+	public function actionDelete($id, $redirectUrl)
 	{
 		$news_version = NewsTranslation::find()->select('version')->where(['news_id' => $id])->all();
 		foreach($news_version as $version)
@@ -269,11 +269,11 @@ class AdminController extends EGController
 			foreach($this->findModels($id, $version) as $model)
 				$model->delete();
 		}
-		return $this->redirect(['index']);
+		return $this->redirect($redirectUrl);
 	}
 
 
-	  public function actionConfirm($id)
+	  public function actionConfirm($id, $redirectUrl)
 	  {
 	    $news_module = Yii::$app->getModule('news');
 	    $response = [
@@ -291,7 +291,6 @@ class AdminController extends EGController
 					];
 				}
 
-				//var_dump($id); die;
 				if ($news->confirm())
 				{
 					$response = [
@@ -316,10 +315,10 @@ class AdminController extends EGController
 			}
 
 			//return json_encode($response);
-		return $this->redirect(['index']);
+		return $this->redirect($redirectUrl);
 	  }
 
-		public function actionReject($id)
+		public function actionReject($id, $redirectUrl)
 	  {
 	    $news_module = Yii::$app->getModule('news');
 	    $response = [
@@ -362,10 +361,10 @@ class AdminController extends EGController
 			}
 
 			//return json_encode($response);
-			return $this->redirect(['index']);
+			return $this->redirect($redirectUrl);
 	  }
 
-		public function actionArchive($id)
+		public function actionArchive($id, $redirectUrl)
 		{
 			$news_module = Yii::$app->getModule('news');
 			$response = [
@@ -408,7 +407,7 @@ class AdminController extends EGController
 			}
 
 			//return json_encode($response);
-			return $this->redirect(['index']);
+			return $this->redirect($redirectUrl);
 		}
 	/**
 	 * Finds the News model based on its primary key value.

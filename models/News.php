@@ -222,7 +222,6 @@ class News extends \yii\db\ActiveRecord
 
 	public function getCanBeArchived()
 	{
-		//TODO : Check date for archive.
 		return (($this->status == self::$_STATUS_SUBMITTED || $this->status == self::$_STATUS_CONFIRMED || $this->status == self::$_STATUS_REJECTED)
 			&& Yii::$app->user &&(Yii::$app->user->identity->isAdmin || Yii::$app->user->id == $this->author_id)
 		);

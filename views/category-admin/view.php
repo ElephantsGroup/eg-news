@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use elephantsGroup\news\models\NewsCategory;
 use elephantsGroup\news\models\NewsCategoryTranslation;
+use Yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\NewsCategory */
@@ -21,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('news_cat', 'Update'), ['update', 'id' => $model->id, 'lang'=>Yii::$app->controller->language], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('news_cat', 'Delete'), ['delete', 'id' => $model->id, 'lang'=>Yii::$app->controller->language], [
+        <?= Html::a(Yii::t('news_cat', 'Delete'), ['delete', 'id' => $model->id, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=>Url::to(['/news/category-admin'])], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('news', 'Are you sure you want to delete this item?'),

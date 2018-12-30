@@ -6,6 +6,7 @@ use elephantsGroup\news\models\News;
 use elephantsGroup\news\models\NewsCategory;
 use elephantsGroup\jdf\Jdf;
 use elephantsGroup\user\models\User;
+use Yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
@@ -23,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('news', 'Update'), ['update', 'id' => $model->id, 'lang'=>Yii::$app->controller->language], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('news', 'Delete'), ['delete', 'id' => $model->id, 'lang'=>Yii::$app->controller->language], [
+        <?= Html::a(Yii::t('news', 'Delete'), ['delete', 'id' => $model->id, 'redirectUrl' => Url::to([ '/news/admin']), 'lang'=>Yii::$app->controller->language], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('news', 'Are you sure you want to delete this item?'),

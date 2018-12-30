@@ -41,9 +41,9 @@ $this->params['breadcrumbs'][] = $module::t('news', 'News List');
 			'value' => function ($model) use($module, $module_base, $item)  {
 				return (
 				NewsTranslation::findOne(['news_id'=>$model->id, 'language'=>$item])
-					? Html::a($module::t('news', 'Edit'), ['/news/translation/update', 'news_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language]) .
-					' / ' . Html::a(Yii::t('news', 'Delete'), ['/news/translation/delete', 'news_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language])
-					: Html::a($module::t('news', 'Create'), ['/news/translation/create', 'news_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language])
+					? Html::a($module::t('news', 'Edit'), ['/news/translation/update', 'news_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=> Yii::$app->request->url]) .
+					' / ' . Html::a(Yii::t('news', 'Delete'), ['/news/translation/delete', 'news_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=> Yii::$app->request->url])
+					: Html::a($module::t('news', 'Create'), ['/news/translation/create', 'news_id'=>$model->id, 'language'=>$item, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=> Yii::$app->request->url])
 				);
 			},
 		];
@@ -114,23 +114,23 @@ $this->params['breadcrumbs'][] = $module::t('news', 'News List');
 		  'value' => function ($model) use($module)  {
   				if ( $model->status == News::$_STATUS_SUBMITTED)
           {
-            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id]) .
-            '/' . Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id]));
+            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]) .
+            '/' . Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]));
           }
           elseif ($model->status == News::$_STATUS_CONFIRMED)
           {
-            return(Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id]) .
-            '/' . Html::a($module::t('news', 'Archive'), ['/news/admin/archive', 'id'=>$model->id]));
+            return(Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]) .
+            '/' . Html::a($module::t('news', 'Archive'), ['/news/admin/archive', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]));
           }
           elseif ($model->status == News::$_STATUS_REJECTED)
           {
-            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id]) .
-            '/' . Html::a($module::t('news', 'Archive'), ['/news/admin/archive', 'id'=>$model->id]));
+            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]) .
+            '/' . Html::a($module::t('news', 'Archive'), ['/news/admin/archive', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]));
           }
           else
           {
-            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id]) .
-            '/' . Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id]));
+            return (Html::a($module::t('news', 'Confirm'), ['/news/admin/confirm', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]) .
+            '/' . Html::a($module::t('news', 'Reject'), ['/news/admin/reject', 'id'=>$model->id, 'redirectUrl'=> Yii::$app->request->url]));
           }
 			},
 		],
@@ -178,7 +178,7 @@ $this->params['breadcrumbs'][] = $module::t('news', 'News List');
 				'delete' => function ($url, $model)
 				{
 					$label = '<span class="glyphicon glyphicon-trash"></span>';
-					$url = ['/news/admin/delete', 'id'=>$model->id, 'lang'=>Yii::$app->controller->language];
+					$url = ['/news/admin/delete', 'id'=>$model->id, 'lang'=>Yii::$app->controller->language, 'redirectUrl'=> Yii::$app->request->url];
 					$options = [
 						'title' => Yii::t('yii', 'Delete'),
             'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),

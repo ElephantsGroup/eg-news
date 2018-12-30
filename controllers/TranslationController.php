@@ -102,30 +102,30 @@ class TranslationController extends EGController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($news_id, $language, $lang = 'fa-IR')
+    public function actionCreate($news_id, $language, $lang = 'fa-IR', $redirectUrl)
     {
-		$_SESSION['KCFINDER']['disabled'] = false;
-		$_SESSION['KCFINDER']['uploadURL'] = News::$upload_url .'images/';
-		$_SESSION['KCFINDER']['uploadDir'] = News::$upload_path . 'images/';
+      $_SESSION['KCFINDER']['disabled'] = false;
+      $_SESSION['KCFINDER']['uploadURL'] = News::$upload_url .'images/';
+      $_SESSION['KCFINDER']['uploadDir'] = News::$upload_path . 'images/';
 
-		$max_version = News::find()->where(['id' => $news_id])->max('version');
-        $model = new NewsTranslation();
-		$model->news_id = $news_id;
-		$model->language = $language;
-		$model->version = $max_version;
+      $max_version = News::find()->where(['id' => $news_id])->max('version');
+      $model = new NewsTranslation();
+      $model->news_id = $news_id;
+      $model->language = $language;
+      $model->version = $max_version;
 
-        if ($model->load(Yii::$app->request->post()))
-		{
-			$model->title = trim($model->title);
-			$model->subtitle = trim($model->subtitle);
-			$model->intro = trim($model->intro);
-			$model->description = trim($model->description);
-			
-			if($model->save())
-				return $this->redirect(['admin/index', 'lang' => $lang]);
+      if ($model->load(Yii::$app->request->post()))
+      {
+        $model->title = trim($model->title);
+        $model->subtitle = trim($model->subtitle);
+        $model->intro = trim($model->intro);
+        $model->description = trim($model->description);
+
+        if($model->save())
+        	return $this->redirect($redirectUrl);
         }
-		else
-		{
+      else
+      {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -139,7 +139,7 @@ class TranslationController extends EGController
      * @param string $language
      * @return mixed
      */
-    public function actionUpdate($news_id, $language, $lang = 'fa-IR')
+    public function actionUpdate($news_id, $language, $lang = 'fa-IR', $redirectUrl)
     {
 		$_SESSION['KCFINDER']['disabled'] = false;
 		$_SESSION['KCFINDER']['uploadURL'] = News::$upload_url .'images/';
@@ -158,7 +158,7 @@ class TranslationController extends EGController
 		{
 			$news->attributes = $news_previous_version->attributes;
 			$news->version = $max_version + 1;
-			
+
 			$datetime = $news->archive_time;
 			$time = $news->archive_time_time;
 			$year = (int)(substr($datetime, 0, 4));
@@ -172,7 +172,7 @@ class TranslationController extends EGController
 			$date = new \DateTime();
 			$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
 			$news->archive_time = $date->format('Y-m-d H:i:s');
-		
+
 			$new_translation->news_id = $model->news_id;
 			$new_translation->language = $model->language;
 			$new_translation->version = $max_version_translation;
@@ -185,17 +185,17 @@ class TranslationController extends EGController
 
 			if(!$translation_changed)
 			{
-				return $this->redirect(['admin/index', 'lang' => $lang]);
+				return $this->redirect($redirectUrl);
 			}
 			else{
 				if( $news->save())
 				{
 					$news_previous_version->updateAttributes (['status' => News::$_STATUS_EDITED]) ;
 					$new_translation->version = $news->version;
-					if ($new_translation->save()) 
+					if ($new_translation->save())
 					{
-						return $this->redirect(['admin/index', 'lang' => $lang]);
-					}				
+						return $this->redirect($redirectUrl);
+					}
 					else
 					{
 						return $this->render('update', [
@@ -204,7 +204,7 @@ class TranslationController extends EGController
 					}
 				}
 				else
-					var_dump($news->errors); die;				
+					var_dump($news->errors); die;
 			}
 		}
 		else
@@ -222,13 +222,13 @@ class TranslationController extends EGController
      * @param string $language
      * @return mixed
      */
-    public function actionDelete($news_id, $language, $lang = 'fa-IR')
+    public function actionDelete($news_id, $language, $lang = 'fa-IR',$redirectUrl)
     {
 		$version = NewsTranslation::find()->where(['news_id' => $news_id, 'language' => $language])->max('version');
         $model = $this->findModel($news_id, $version, $language);
-		
+
 		if ($model->delete())
-			return $this->redirect(['admin/index', 'lang' => $lang]);
+			return $this->redirect($redirectUrl);
 		else
 			var_dump($model->errors);
 	}

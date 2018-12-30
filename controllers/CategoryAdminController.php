@@ -21,12 +21,12 @@ class CategoryAdminController extends EGController
     public function behaviors()
     {
 		$behaviors = [];
-		$behaviors['verbs'] = [
+		/*$behaviors['verbs'] = [
 			'class' => VerbFilter::className(),
 			'actions' => [
 				'delete' => ['post'],
 			],
-		];
+		];*/
         /*$auth = Yii::$app->getAuthManager();
         if ($auth)
 		{
@@ -154,7 +154,7 @@ class CategoryAdminController extends EGController
 					$translation->cat_id = $model->id;
 					$translation->language = $this->language;
 					if($translation->save())
-						return $this->redirect(['view', 'id' => $model->id]);					
+						return $this->redirect(['view', 'id' => $model->id]);
 				}
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
@@ -174,11 +174,11 @@ class CategoryAdminController extends EGController
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $redirectUrl)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect($redirectUrl);
     }
 
     /**

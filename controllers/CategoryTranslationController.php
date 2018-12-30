@@ -100,23 +100,23 @@ class CategoryTranslationController extends EGController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($cat_id, $language, $lang = 'fa-IR')
+    public function actionCreate($cat_id, $language, $lang = 'fa-IR', $redirectUrl)
     {
         $model = new NewsCategoryTranslation();
-		$model->cat_id = $cat_id;
-		$model->language = $language;
+    		$model->cat_id = $cat_id;
+    		$model->language = $language;
 
         if ($model->load(Yii::$app->request->post()) && $model->save())
-		{
-			$model->cat_id = $cat_id;
-			$model->language = $language;
-            return $this->redirect(['category-admin/index', 'lang' => $lang]);
+    		{
+    			$model->cat_id = $cat_id;
+    			$model->language = $language;
+                return $this->redirect($redirectUrl);
         }
-		else
-		{
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+    		else
+    		{
+          return $this->render('create', [
+              'model' => $model,
+          ]);
         }
     }
 
@@ -127,14 +127,14 @@ class CategoryTranslationController extends EGController
      * @param string $language
      * @return mixed
      */
-    public function actionUpdate($cat_id, $language, $lang = 'fa-IR')
+    public function actionUpdate($cat_id, $language, $lang = 'fa-IR', $redirectUrl)
     {
         $model = $this->findModel($cat_id, $language);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['category-admin/index', 'lang' => $lang]);
+            return $this->redirect($redirectUrl);
         }
-		else 
+		else
 		{
             return $this->render('update', [
                 'model' => $model,
@@ -149,11 +149,11 @@ class CategoryTranslationController extends EGController
      * @param string $language
      * @return mixed
      */
-    public function actionDelete($cat_id, $language, $lang = 'fa-IR')
+    public function actionDelete($cat_id, $language, $lang = 'fa-IR', $redirectUrl)
     {
         $this->findModel($cat_id, $language)->delete();
 
-		return $this->redirect(['category-admin/index', 'lang' => $lang]);
+		return $this->redirect($redirectUrl);
 	}
     /**
      * Finds the NewsCategoryTranslation model based on its primary key value.
