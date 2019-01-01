@@ -52,7 +52,8 @@ class LastNews extends Widget
 		foreach($news as $news_item)
 		{
 			if($i == $this->number) break;
-			$translation = NewsTranslation::findOne(array('news_id'=>$news_item->id, 'language'=>$this->language));
+			$max_version_translation = NewsTranslation::find()->where(['news_id' => $news_item->id, 'language' => $this->language])->max('version');
+			$translation = NewsTranslation::findOne(array('news_id'=>$news_item->id, 'language'=>$this->language, 'version' => $max_version_translation));
 			if($translation)
 			{
 				$this->_news[] = [

@@ -30,8 +30,8 @@ class DefaultController extends EGController
 				//$date->setTimestamp();
 				$date->setTimezone(new \DateTimezone('Iran'));
 				$from = $date->format('Y-m-d');
-			}	
-			
+			}
+
 		}else
 		{
 			if($lang == 'fa-IR')
@@ -52,12 +52,12 @@ class DefaultController extends EGController
 				$from = $date->format('Y-m-d');
 			}
 		}
-		
+
 		return $from;
 	}
-	
+
 	private function getEndDate($lang, $end_time = null)
-	{		
+	{
 		if( $end_time == null)
 		{
 			if($lang == 'fa-IR')
@@ -95,45 +95,46 @@ class DefaultController extends EGController
 				$date->setTimestamp($end_date);
 				$to = $date->format('Y-m-d');
 			}
-			
+
 		}
 		return $to;
 	}
 
     public function actionIndex($lang = 'fa-IR', $begin_time = null, $end_time = null)
     {
-		Stat::setView('news', 'default', 'index');
+			Stat::setView('news', 'default', 'index');
 
-        //$this->layout = '//creative-item';
-		Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news', 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
-		Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news', 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
-        
-		$begin = $this->getBeginDate($this->language, $begin_time);
-		$end = $this->getEndDate($this->language, $end_time); 
-		$news_list = [];
-//		$news = News::find()->where(['between', 'creation_time', $begin, $end])->all();
-		$news = News::find()->all();
-		foreach($news as $news_item)
-		{
-			$translation = NewsTranslation::findOne(array('news_id' => $news_item->id, 'language' => $this->language));
-			if($translation)
+	        //$this->layout = '//creative-item';
+			Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news', 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
+			Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news', 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
+
+			$begin = $this->getBeginDate($this->language, $begin_time);
+			$end = $this->getEndDate($this->language, $end_time);
+			$news_list = [];
+	//		$news = News::find()->where(['between', 'creation_time', $begin, $end])->all();
+			$news = News::find()->notEdited()->all();
+			foreach($news as $news_item)
 			{
-				$news_list[] = [
-				    'id' => $news_item['id'],
-                    'thumb' => News::$upload_url . $news_item['id'] . '/' . $news_item['thumb'],
-                    'title' => $translation->title,
-                    'subtitle' => $translation->subtitle,
-                    'intro' => $translation->intro
-                ];
+				$max_version_translation = NewsTranslation::find()->where(['news_id' => $news_item->id, 'language' => $this->language])->max('version');
+				$translation = NewsTranslation::findOne(array('news_id' => $news_item->id, 'language' => $this->language, 'version' => $max_version_translation));
+				if($translation)
+				{
+					$news_list[] = [
+					    'id' => $news_item['id'],
+	                    'thumb' => News::$upload_url . $news_item['id'] . '/' . $news_item['thumb'],
+	                    'title' => $translation->title,
+	                    'subtitle' => $translation->subtitle,
+	                    'intro' => $translation->intro
+	                ];
+				}
 			}
-		}
-		//var_dump($end); die;
-		return $this->render('index',[
-			'news' => $news_list,
-			'from' => $begin,
-			'to' => $end,
-			'language' => $this->language
-		]);
+			//var_dump($end); die;
+			return $this->render('index',[
+				'news' => $news_list,
+				'from' => $begin,
+				'to' => $end,
+				'language' => $this->language
+			]);
     }
 
     public function actionView($id, $lang = 'fa-IR')
@@ -143,7 +144,10 @@ class DefaultController extends EGController
         //$this->layout = '//creative-item';
 		Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news/default/view', 'id'=>$id, 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
 		Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news/default/view', 'id'=>$id, 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
-		$model = News::findOne($id);
+		//$model = News::findOne($id);
+		$max_version = News::find()->where(['id' => $id])->max('version');
+		$model = News::findOne(['id' => $id, 'version' => $max_version]);
+
 		if(!$model)
 			throw new NotFoundHttpException('The requested page does not exist.');
 		$model->views++;

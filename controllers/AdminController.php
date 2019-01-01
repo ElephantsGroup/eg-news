@@ -175,7 +175,7 @@ class AdminController extends EGController
 
 		$max_version = News::find()->where(['id' => $id])->max('version');
 		$news_previous_version = News::findOne(array('id' => $id, 'version' => $max_version));
-				//var_dump($news_previous_version->attributes); die;
+		//var_dump($news_previous_version->attributes); die;
 		$model = new News();
 
 		$max_version_translation = NewsTranslation::find()->where(['news_id' => $id, 'language' => $this->language])->max('version');
@@ -193,8 +193,11 @@ class AdminController extends EGController
 				$model->thumb = $news_previous_version->thumb;
 
       if($model->archive_time == $news_previous_version->archive_time)
+			{
 				$model->archive_time = $news_previous_version->archive_time;
-      else {
+			}
+      else
+			 {
         $datetime = $model->archive_time;
   			$time = $model->archive_time_time;
   			$year = (int)(substr($datetime, 0, 4));
@@ -243,6 +246,9 @@ class AdminController extends EGController
 					{
 						return $this->redirect(['view', 'id' => $model->id]);
 					}
+				}
+				else {
+					var_dump($model->errors); die;
 				}
 			}
 		}

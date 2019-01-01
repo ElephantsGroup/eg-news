@@ -101,7 +101,7 @@ class News extends \yii\db\ActiveRecord
             'thumb' => $module::t('Thumbnail'),
             'author_id' => $module::t('Author ID'),
             'status' => $module::t('Status'),
-			'title' => $module::t('Title'),
+						'title' => $module::t('Title'),
         ];
     }
 
@@ -109,7 +109,8 @@ class News extends \yii\db\ActiveRecord
 	{
 		$module = \Yii::$app->getModule('news');
 		$value = $module::t('news', 'Undefined');
-		$translate = NewsTranslation::findOne(['news_id'=>$this->id, 'language'=>Yii::$app->language]);
+		$max_version_translation = NewsTranslation::find()->where(['news_id' => $this->id, 'language'=>Yii::$app->language])->max('version');
+		$translate = NewsTranslation::findOne(['news_id'=>$this->id, 'language'=>Yii::$app->language, 'version' => $max_version_translation]);
 		if($translate)
 			$value = $translate->title;
 		return $value;

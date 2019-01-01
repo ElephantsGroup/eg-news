@@ -34,8 +34,8 @@ class CatController extends EGController
 				//$date->setTimestamp();
 				$date->setTimezone(new \DateTimezone('Iran'));
 				$from = $date->format('Y-m-d');
-			}	
-			
+			}
+
 		}else
 		{
 			if($lang == 'fa-IR')
@@ -56,12 +56,12 @@ class CatController extends EGController
 				$from = $date->format('Y-m-d');
 			}
 		}
-		
+
 		return $from;
 	}
-	
+
 	private function getEndDate($lang, $end_time = null)
-	{		
+	{
 		if( $end_time == null)
 		{
 			if($lang == 'fa-IR')
@@ -99,7 +99,7 @@ class CatController extends EGController
 				$date->setTimestamp($end_date);
 				$to = $date->format('Y-m-d');
 			}
-			
+
 		}
 		return $to;
 	}
@@ -107,13 +107,13 @@ class CatController extends EGController
     public function actionIndex($lang = 'fa-IR', $begin_time = null, $end_time = null)
     {
 		Stat::setView('news', 'default', 'index');
-		
+
 		//$this->layout = '//creative-item';
 		Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news', 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
 		Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news', 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
-        
+
 		$begin = $this->getBeginDate($this->language, $begin_time);
-		$end = $this->getEndDate($this->language, $end_time); 
+		$end = $this->getEndDate($this->language, $end_time);
 		$cat_list = [];
 //		$news = news::find()->where(['between', 'creation_time', $begin, $end])->all();
 		$cat = NewsCategory::find()->all();
@@ -148,20 +148,21 @@ class CatController extends EGController
 
         $model = NewsCategory::findOne($id);
         $news_list = [];
-        $cat_news = News::find()->where(['category_id' => $id])->all();
+        $cat_news = News::find()->where(['category_id' => $id])->notEdited()->all();
         foreach($cat_news as $item)
         {
-            $translation = NewsTranslation::findOne(array('news_id' => $item->id, 'language' => $this->language));
-            if($translation)
-            {
-                $news_list[] = [
-                    'id' => $item['id'],
-                    'thumb' => NewsCategory::$upload_url . $item['id'] . '/' . $item['thumb'],
-                    'title' => $translation->title,
-                    'subtitle' => $translation->subtitle,
-                    'intro' => $translation->intro
-                ];
-            }
+					$max_version_translation = NewsTranslation::find()->where(['news_id' => $item->id, 'language' => $this->language])->max('version');
+          $translation = NewsTranslation::findOne(array('news_id' => $item->id, 'language' => $this->language, 'version' => $max_version_translation));
+          if($translation)
+          {
+              $news_list[] = [
+                  'id' => $item['id'],
+                  'thumb' => NewsCategory::$upload_url . $item['id'] . '/' . $item['thumb'],
+                  'title' => $translation->title,
+                  'subtitle' => $translation->subtitle,
+                  'intro' => $translation->intro
+              ];
+          }
         }
         return $this->render('view', [
             'model' => $model,

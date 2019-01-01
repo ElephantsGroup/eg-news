@@ -30,14 +30,15 @@ class ArchivedNews extends Widget
             $this->view_file = Yii::t('news_params', 'View File');
 	}
 
-    public function run()
+  public function run()
 	{
 		$news = News::find()->archived()->orderBy(['creation_time'=>SORT_DESC])->all();
 		$i = 0;
 		foreach($news as $news_item)
 		{
 			if($i == $this->number) break;
-			$translation = NewsTranslation::findOne(array('news_id'=>$news_item->id, 'language'=>$this->language));
+			$max_version_translation = NewsTranslation::find()->where(['news_id' => $news_item->id, 'language' => $this->language])->max('version');
+			$translation = NewsTranslation::findOne(array('news_id'=>$news_item->id, 'language'=>$this->language, 'version' => $max_date_month));
 			if($translation)
 			{
 				$this->_news[] = [
