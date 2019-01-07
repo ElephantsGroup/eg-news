@@ -64,7 +64,6 @@ class m150803_172218_create_news extends Migration
         ]);
         $this->insert('{{%eg_news}}', [
 			'id' => 1,
-			'version' => 1,
             'category_id' => 1,
             'thumb' => 'news-1.png',
             'archive_time' => date('Y-m-d H:i:s',time() + 108000),
@@ -75,7 +74,6 @@ class m150803_172218_create_news extends Migration
         ]);
         $this->insert('{{%eg_news}}', [
 			'id' => 2,
-            'version' => 1,
 			'category_id' => 1,
             'thumb' => 'news-2.png',
             'archive_time' => date('Y-m-d H:i:s',time() + 108000),
@@ -86,7 +84,6 @@ class m150803_172218_create_news extends Migration
         ]);
         $this->insert('{{%eg_news}}', [
 			'id' => 3,
-			'version' => 1,
             'category_id' => 1,
             'thumb' => 'news-3.png',
             'archive_time' => date('Y-m-d H:i:s',time() + 108000),
@@ -97,7 +94,6 @@ class m150803_172218_create_news extends Migration
         ]);
         $this->insert('{{%eg_news_translation}}', [
             'news_id' => 1,
-			'version' => 1,
             'language' => 'fa-IR',
             'title' => 'ساخت اولین نسخه eg-cms',
             'subtitle' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد.',
@@ -106,7 +102,6 @@ class m150803_172218_create_news extends Migration
         ]);
         $this->insert('{{%eg_news_translation}}', [
             'news_id' => 2,
-			'version' => 1,
             'language' => 'fa-IR',
             'title' => 'ساخت اولین نسخه eg-cms',
             'subtitle' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد.',
@@ -115,7 +110,6 @@ class m150803_172218_create_news extends Migration
         ]);
         $this->insert('{{%eg_news_translation}}', [
             'news_id' => 3,
-			'version' => 1,
             'language' => 'fa-IR',
             'title' => 'ساخت اولین نسخه eg-cms',
             'subtitle' => 'اولین نسخه eg-cms با داشتن پلاگین های متعدد ساخته و در گیت هاب عرضه شد.',
