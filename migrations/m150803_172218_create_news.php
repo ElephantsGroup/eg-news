@@ -24,7 +24,6 @@ class m150803_172218_create_news extends Migration
 
         $this->createTable('{{%eg_news}}',[
             'id' => $this->integer(11)->notNull(),
-			'version' => $this->integer(11)->notNull(),
             'category_id' => $this->integer(11),
             'update_time' => $this->timestamp(),
             'creation_time' => $this->timestamp(),
@@ -33,21 +32,20 @@ class m150803_172218_create_news extends Migration
             'thumb' => $this->string(15)->notNull()->defaultValue('default.png'),
             'author_id' => $this->integer(11),
             'status' => $this->smallInteger(4)->notNull()->defaultValue(0),
-			'PRIMARY KEY (`id`, `version`)'
+			'PRIMARY KEY (`id`)'
         ]);
         $this->addForeignKey('fk_eg_news_category', '{{%eg_news}}', 'category_id', '{{%eg_news_category}}', 'id', 'SET NULL', 'CASCADE');
         $this->addForeignKey('fk_eg_news_author', '{{%eg_news}}', 'author_id', '{{%user}}', 'id', 'SET NULL', 'CASCADE');
         $this->createTable('{{%eg_news_translation}}',[
             'news_id' => $this->integer(11)->notNull(),
-			'version' => $this->integer(11)->notNull(),
-            'language' => $this->string(5)->notNull(),
+			      'language' => $this->string(5)->notNull(),
             'title' => $this->string(255),
             'subtitle' => $this->string(255),
             'intro' => $this->text(),
             'description' => $this->text(),
-            'PRIMARY KEY (`news_id`, `version`, `language`)'
+            'PRIMARY KEY (`news_id`, `language`)'
         ]);
-        $this->addForeignKey('fk_eg_news_translation', '{{%eg_news_translation}}', ['news_id', 'version'], '{{%eg_news}}', ['id', 'version'] , 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_eg_news_translation', '{{%eg_news_translation}}', 'news_id', '{{%eg_news}}', 'id' , 'RESTRICT', 'CASCADE');
 
         $this->insert('{{%eg_news_category}}', [
 			'id' => 1,
