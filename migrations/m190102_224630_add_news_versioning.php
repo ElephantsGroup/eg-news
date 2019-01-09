@@ -50,7 +50,7 @@ class m190102_224630_add_news_versioning extends Migration
                 $item['version'] = 1;
               }
               $columns = array_keys($records[0]);
-              if ($columns && !empty($columns))
+              if ($columns !== null && !empty($columns))
               {
                 if ($db->schema->getTableSchema("{{%eg_news_new}}", true) !== null)
                 {
@@ -69,7 +69,7 @@ class m190102_224630_add_news_versioning extends Migration
                 $item['version'] = 1;
               }
               $columns = array_keys($records[0]);
-              if ($columns && !empty($columns))
+              if ($columns !== null && !empty($columns))
               {
                 if ($db->schema->getTableSchema("{{%eg_news_translation_new}}", true) !== null)
                 {

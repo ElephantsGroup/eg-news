@@ -129,7 +129,10 @@ class AdminController extends EGController
 			$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
 
 			$max_ID = News::find()->max('id');
-			$model->id = $max_ID+1;
+			if($max_ID == null && empty($max_ID))
+				$model->id = 1;
+			else
+				$model->id = $max_ID+1;
 			$model->version = 1;
 			$model->archive_time = $date->format('Y-m-d H:i:s');
 			$model->author_id = (int) Yii::$app->user->id;
@@ -184,7 +187,6 @@ class AdminController extends EGController
 
 		if ($model->load(Yii::$app->request->post()) && $translation->load(Yii::$app->request->post()))
 		{
-      //var_dump($model->archive_time);die;
 			$model->id = $id;
 			$model->version = $max_version;
 			$model->image_file = UploadedFile::getInstance($model, 'image_file');
@@ -269,7 +271,7 @@ class AdminController extends EGController
 	 */
 	public function actionDelete($id, $redirectUrl)
 	{
-		$news_version = NewsTranslation::find()->select('version')->where(['news_id' => $id])->all();
+		$news_version = News::find()->select('version')->where(['id' => $id])->all();
 		foreach($news_version as $version)
 		{
 			foreach($this->findModels($id, $version) as $model)
@@ -277,7 +279,6 @@ class AdminController extends EGController
 		}
 		return $this->redirect($redirectUrl);
 	}
-
 
 	  public function actionConfirm($id, $redirectUrl)
 	  {
@@ -319,8 +320,6 @@ class AdminController extends EGController
 					'message' => $news_module::t('news', $exp)
 				];
 			}
-
-			//return json_encode($response);
 		return $this->redirect($redirectUrl);
 	  }
 

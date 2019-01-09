@@ -39,9 +39,9 @@ class NewsTranslation extends \yii\db\ActiveRecord
             [['intro', 'description'], 'string'],
             [['language'], 'string', 'max' => 5],
             [['title', 'subtitle'], 'string', 'max' => 255],
-			[['title'], 'trim'],
-			[['language'], 'default', 'value' => Yii::$app->language],
-			[['language'], 'in', 'range' => array_keys($module_base->languages)],
+      			[['title'], 'trim'],
+      			[['language'], 'default', 'value' => Yii::$app->language],
+      			[['language'], 'in', 'range' => array_keys($module_base->languages)],
         ];
     }
 
@@ -51,7 +51,7 @@ class NewsTranslation extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         $module_base = \Yii::$app->getModule('base');
-		$module_news = \Yii::$app->getModule('news');
+		    $module_news = \Yii::$app->getModule('news');
         return [
             'news_id' => $module_news::t('news', 'News id'),
             'version' => $module_news::t('news', 'Version'),

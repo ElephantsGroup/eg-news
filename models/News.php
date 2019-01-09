@@ -77,9 +77,9 @@ class News extends \yii\db\ActiveRecord
             [['id', 'version', 'category_id'], 'required'],
             [['archive_time_time'], 'string', 'max' => 11],
             [['thumb'], 'default', 'value'=>'default.png'],
-			[['status'], 'default', 'value' => self::$_STATUS_SUBMITTED],
-			[['status'], 'in', 'range' => array_keys(self::getStatus())],
-			[['update_time'], 'default', 'value' => (new \DateTime)->setTimestamp(time())->setTimezone(new \DateTimeZone('Iran'))->format('Y-m-d H:i:s')],
+						[['status'], 'default', 'value' => self::$_STATUS_SUBMITTED],
+						[['status'], 'in', 'range' => array_keys(self::getStatus())],
+						[['update_time'], 'default', 'value' => (new \DateTime)->setTimestamp(time())->setTimezone(new \DateTimeZone('Iran'))->format('Y-m-d H:i:s')],
             [['creation_time'], 'default', 'value' => (new \DateTime)->setTimestamp(time())->setTimezone(new \DateTimeZone('Iran'))->format('Y-m-d H:i:s')]
         ];
     }

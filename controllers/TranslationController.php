@@ -227,13 +227,13 @@ class TranslationController extends EGController
      */
     public function actionDelete($news_id, $language, $lang = 'fa-IR',$redirectUrl)
     {
-		$version = NewsTranslation::find()->where(['news_id' => $news_id, 'language' => $language])->max('version');
-        $model = $this->findModel($news_id, $version, $language);
+  		$version = NewsTranslation::find()->where(['news_id' => $news_id, 'language' => $language])->max('version');
+          $model = $this->findModel($news_id, $version, $language);
 
-		if ($model->delete())
-			return $this->redirect($redirectUrl);
-		else
-			var_dump($model->errors);
+  		if ($model->delete())
+  			return $this->redirect($redirectUrl);
+  		else
+  			var_dump($model->errors);
 	}
 
     /**
