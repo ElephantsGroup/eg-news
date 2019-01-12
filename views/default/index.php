@@ -3,6 +3,8 @@ use yii\helpers\Url;
 use elephantsGroup\news\components\LastNews;
 use elephantsGroup\news\components\DateList;
 $module = \Yii::$app->getModule('news');
+$module_relation = \Yii::$app->getModule('service-relation');
+$service_id = array_keys($module_relation->services, 'News')[0];
 ?>
 <header>
 	<div class="header-content">
@@ -15,7 +17,7 @@ $module = \Yii::$app->getModule('news');
 </header>
 
 <div class="news-default-index">
-	<?php 
+	<?php
 //		echo LastNews::widget(['title'=>Yii::t('app', 'News'), 'subtitle'=>' ', 'show_archive_button'=>true, 'archive_button_text'=>Yii::t('app', 'َNews Archive')]);
 //		echo DateList::widget();
 	?>
@@ -27,7 +29,7 @@ $module = \Yii::$app->getModule('news');
 					<figure><img src="<?= $news_item['thumb'] ?>" alt="<?= $news_item['title'] ?>"></figure>
 					<h4><?= $news_item['subtitle'] ?></h4>
 					<?php
-						if($module->enabled_like) echo \elephantsGroup\like\components\Likes::widget(['item' => $news_item['id'], 'service' => 2]);
+						if($module->enabled_like) echo \elephantsGroup\like\components\Likes::widget(['item' => $news_item['id'], 'service' => $service_id]);
 					?>
 					<h3>
 					<a href="<?= Url::to(['/news/default/view', 'id' => $news_item['id'], 'lang'=>$language]) ?>"><?= $news_item['title'] ?></a>
@@ -35,7 +37,7 @@ $module = \Yii::$app->getModule('news');
 					<div class="text-small"><?= $news_item['intro'] ?></div>
 					<div class="col-md-4" style="float: right; padding: 20px;" >
 					<?php
-						if ($module->enabled_rating) echo \elephantsGroup\starRating\components\Rate::widget(['item' => $news_item['id'], 'service' => 2]);
+						if ($module->enabled_rating) echo \elephantsGroup\starRating\components\Rate::widget(['item' => $news_item['id'], 'service' => $service_id]);
 					?>
 					</div>
 				</div>
@@ -44,4 +46,3 @@ $module = \Yii::$app->getModule('news');
 		</div><!-- /.container -->
 	</section>
 </div>
-

@@ -13,6 +13,8 @@ RatingAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
 $module = \Yii::$app->getModule('news');
+$module_relation = \Yii::$app->getModule('service-relation');
+$service_id = array_keys($module_relation->services, 'News')[0];
 
 $lang = Yii::$app->language;
 $this->title = Yii::t('news', 'News id') . ' ' . $model->id;
@@ -37,16 +39,16 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="container inner-top-sm inner-bottom classic-blog no-sidebar">
 		<div class="row">
 			<div class="col-md-9 center-block">
-					
+
 				<div class="post">
-				
+
 					<div class="post-content">
 						<div class="post-media">
 							<figure>
 								<img src=" <?= News::$upload_url . $model->id . '/' . $model->thumb ?>" alt="">
 							</figure>
 						</div>
-						
+
 						<p class="subtitle">
 							<?php
 								echo ($model->translationByLang ? $model->translationByLang->subtitle : '');
@@ -55,18 +57,18 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="row">
 							<div>
 								<?php
-								if($module->enabled_like) echo \elephantsGroup\like\components\Likes::widget(['item' => $model->id, 'service' => 2]);
+								if($module->enabled_like) echo \elephantsGroup\like\components\Likes::widget(['item' => $model->id, 'service' => $service_id]);
 								?>
 							</div>
 							<div class="col-md-6" style="float: right">
 								<?php
-								if($module->enabled_rating) echo \elephantsGroup\starRating\components\Rate::widget(['item' => $model->id, 'service' => 2]);
+								if($module->enabled_rating) echo \elephantsGroup\starRating\components\Rate::widget(['item' => $model->id, 'service' => $service_id]);
 								?>
 							</div>
 						</div>
-						
+
 						<h1 class="post-title"><?= Html::encode($this->title) ?></h1>
-						
+
 						<ul class="post-details">
 							<li class="date">
 							<?php
@@ -74,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									echo Jdf::jdate('d F Y - H:i', (new \DateTime($model->creation_time))->getTimestamp(), '', 'Iran', 'fa-IR');
 								else
 									echo date('M d, Y', strtotime($model->creation_time));
-								
+
 							?>
 							</li>
 							<li class="categories">
@@ -86,10 +88,10 @@ $this->params['breadcrumbs'][] = $this->title;
 								</a>
 							</li>
 							<?php /* echo "<li class='views'>$model->views</li>"; */ ?>
-							
+
 						</ul><!-- /.post-details -->
 						<div class="clearfix"></div>
-						
+
 						<?php
 							echo ($model->translationByLang ? $model->translationByLang->description : '');
 						?>
@@ -98,18 +100,18 @@ $this->params['breadcrumbs'][] = $this->title;
 							<h4 style="padding: 20px;"><?= Yii::t('app', 'Users Comment') ?></h4>
 							<div>
 								<?php
-								echo \elephantsGroup\comment\components\LastComments::widget(['item' => $model->id, 'service' => 2]);
+								echo \elephantsGroup\comment\components\LastComments::widget(['item' => $model->id, 'service' => $service_id]);
 								?>
 							</div>
 							<?php
-							echo \elephantsGroup\comment\components\Comments::widget(['item' => $model->id, 'service' => 2]);
+							echo \elephantsGroup\comment\components\Comments::widget(['item' => $model->id, 'item_version' => $model->version, 'service' => $service_id]);
 							?>
 						<?php endif;?>
-						
+
 					</div><!-- /.post-content -->
-					
+
 				</div><!-- /.post -->
-				
+
 			</div><!-- /.col -->
 		</div><!-- /.row -->
 	</div><!-- /.container -->
