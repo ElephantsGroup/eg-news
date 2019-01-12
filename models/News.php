@@ -139,7 +139,7 @@ class News extends \yii\db\ActiveRecord
 
     public function getTranslationByLang()
     {
-        return $this->hasOne(NewsTranslation::className(), ['news_id' => 'id', 'version' => 'version'])->where('language = :language', [':language' => Yii::$app->controller->language]);
+        return $this->hasOne(NewsTranslation::className(), ['news_id' => 'id'])->where('language = :language', [':language' => Yii::$app->controller->language])->orderBy(['version'=>SORT_DESC]);
     }
 
 	public static function find()
