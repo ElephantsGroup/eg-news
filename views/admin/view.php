@@ -62,7 +62,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value'  => Jdf::jdate('Y/m/d H:i:s', (new \DateTime($model->archive_time))->getTimestamp(), '', 'Iran', 'en'),
 				//'filter' => Lookup::items('SubjectType'),
 			],
-            'views',
+			[
+				'attribute'  => 'publish_time',
+				'value'  => Jdf::jdate('Y/m/d H:i:s', (new \DateTime($model->publish_time))->getTimestamp(), '', 'Iran', 'en'),
+				//'filter' => Lookup::items('SubjectType'),
+			],
+    	'views',
 			[
 				'attribute'  => 'author_id',
 				'value'  => User::findOne($model->author_id)->username,

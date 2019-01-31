@@ -44,10 +44,14 @@ class LastNews extends Widget
 
     public function run()
 	{
+		$date = new \DateTime('now');
+		$date->setTimezone(new \DateTimezone('Iran'));
+		$now = $date->format('Y-m-d H:m:s');
+
 		if($this->category_id != 0)
-			$news = News::find()->confirmed()->where(['category_id' => $this->category_id])->orderBy(['creation_time'=>SORT_DESC])->all();
+			$news = News::find()->where(['<=', 'publish_time' , $now ])->confirmed()->where(['category_id' => $this->category_id])->orderBy(['creation_time'=>SORT_DESC])->all();
 		else
-			$news = News::find()->confirmed()->orderBy(['creation_time'=>SORT_DESC])->all();
+			$news = News::find()->where(['<=', 'publish_time' , $now ])->confirmed()->orderBy(['creation_time'=>SORT_DESC])->all();
 		$i = 0;
 		foreach($news as $news_item)
 		{

@@ -14,6 +14,7 @@ use yii\db\ActiveQuery;
  * @property string $creation_time
  * @property string $update_time
  * @property string $archive_time
+ * @property string $publish_time
  * @property integer $views
  * @property string $thumb
  * @property integer $author_id
@@ -26,6 +27,7 @@ class News extends \yii\db\ActiveRecord
 {
 	public $image_file;
 	public $archive_time_time;
+	public $publish_time_time;
 
 	public static $upload_url;
   public static $upload_path;
@@ -72,14 +74,15 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'version', 'category_id', 'views', 'author_id', 'status'], 'integer'],
-            [['creation_time', 'update_time', 'archive_time'], 'date', 'format'=>'php:Y-m-d H:i:s'],
+            [['creation_time', 'update_time', 'archive_time', 'publish_time'], 'date', 'format'=>'php:Y-m-d H:i:s'],
             [['image_file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false],
             [['id', 'version', 'category_id'], 'required'],
-            [['archive_time_time'], 'string', 'max' => 11],
+            [['archive_time_time', 'publish_time_time'], 'string', 'max' => 11],
             [['thumb'], 'default', 'value'=>'default.png'],
 						[['status'], 'default', 'value' => self::$_STATUS_SUBMITTED],
 						[['status'], 'in', 'range' => array_keys(self::getStatus())],
 						[['update_time'], 'default', 'value' => (new \DateTime)->setTimestamp(time())->setTimezone(new \DateTimeZone('Iran'))->format('Y-m-d H:i:s')],
+						[['publish_time'], 'default', 'value' => (new \DateTime)->setTimestamp(time())->setTimezone(new \DateTimeZone('Iran'))->format('Y-m-d H:i:s')],
             [['creation_time'], 'default', 'value' => (new \DateTime)->setTimestamp(time())->setTimezone(new \DateTimeZone('Iran'))->format('Y-m-d H:i:s')]
         ];
     }
@@ -97,6 +100,7 @@ class News extends \yii\db\ActiveRecord
             'creation_time' => $module::t('Creation Time'),
             'update_time' => $module::t('Update Time'),
             'archive_time' => $module::t('Archive Time'),
+            'publish_time' => $module::t('Publish Time'),
             'views' => $module::t('Views'),
             'thumb' => $module::t('Thumbnail'),
             'author_id' => $module::t('Author ID'),

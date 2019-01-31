@@ -128,6 +128,19 @@ class AdminController extends EGController
 			$date = new \DateTime();
 			$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
 
+			$datetime_publish = $model->publish_time;
+			$time_publish = $model->publish_time_time;
+			$year_publish = (int)(substr($datetime_publish, 0, 4));
+			$month_publish = (int)(substr($datetime_publish, 5, 2));
+			$day_publish = (int)(substr($datetime_publish, 8, 2));
+			$hour_publish = (int)(substr($time_publish, 0, 2));
+			$minute_publish = (int)(substr($time_publish, 3, 2));
+			$second_publish = (int)(substr($time_publish, 6, 2));
+			if(substr($time_publish, 9, 2) == 'PM')
+					$hour_publish += 12;
+			$date_publish = new \DateTime();
+			$date_publish->setTimestamp(Jdf::jmktime($hour_publish, $minute_publish, $second_publish, $month_publish, $day_publish, $year_publish));
+
 			$max_ID = News::find()->max('id');
 			if($max_ID == null && empty($max_ID))
 				$model->id = 1;
@@ -135,6 +148,7 @@ class AdminController extends EGController
 				$model->id = $max_ID+1;
 			$model->version = 1;
 			$model->archive_time = $date->format('Y-m-d H:i:s');
+			$model->publish_time = $date_publish->format('Y-m-d H:i:s');
 			$model->author_id = (int) Yii::$app->user->id;
 			$model->image_file = UploadedFile::getInstance($model, 'image_file');
 
@@ -214,6 +228,27 @@ class AdminController extends EGController
   			$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
         $model->archive_time = $date->format('Y-m-d H:i:s');
       }
+
+			if($model->publish_time == $news_previous_version->publish_time)
+			{
+				$model->publish_time = $news_previous_version->publish_time;
+			}
+			else
+			 {
+				$datetime = $model->publish_time;
+				$time = $model->publish_time_time;
+				$year = (int)(substr($datetime, 0, 4));
+				$month = (int)(substr($datetime, 5, 2));
+				$day = (int)(substr($datetime, 8, 2));
+				$hour = (int)(substr($time, 0, 2));
+				$minute = (int)(substr($time, 3, 2));
+				$second = (int)(substr($time, 6, 2));
+				if(substr($time, 9, 2) == 'PM')
+					$hour += 12;
+				$date = new \DateTime();
+				$date->setTimestamp(Jdf::jmktime($hour, $minute, $second, $month, $day, $year));
+				$model->publish_time = $date->format('Y-m-d H:i:s');
+			}
 
 			$translation->news_id = $model->id;
 			$translation->language = $this->language;

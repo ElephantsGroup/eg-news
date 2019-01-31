@@ -21,7 +21,7 @@ class NewsSearch extends News
     {
         return [
             [['id', 'category_id', 'views', 'author_id', 'status'], 'integer'],
-            [['creation_time', 'update_time', 'archive_time', 'title'], 'safe'],
+            [['creation_time', 'update_time', 'archive_time', 'publish_time', 'title'], 'safe'],
         ];
     }
 

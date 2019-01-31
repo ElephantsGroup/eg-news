@@ -36,8 +36,12 @@ use kartik\time\TimePicker;
 	?>
 
     <?= $form->field($model, 'archive_time')->widget(jDate\DatePicker::className()) ?>
-	
-	<?= $form->field($model, 'archive_time_time')->label('')->widget(TimePicker::className(), ['value' => '12:00 AM', 'pluginOptions' => ['showSeconds' => true]]) ?>
+
+	  <?= $form->field($model, 'archive_time_time')->label('')->widget(TimePicker::className(), ['value' => '12:00 AM', 'pluginOptions' => ['showSeconds' => true]]) ?>
+
+		<?= $form->field($model, 'publish_time')->widget(jDate\DatePicker::className()) ?>
+
+	  <?= $form->field($model, 'publish_time_time')->label('')->widget(TimePicker::className(), ['value' => '12:00 AM', 'pluginOptions' => ['showSeconds' => true]]) ?>
 
     <?= $form->field($model, 'image_file')->label('')->fileInput() ?>
 
@@ -56,7 +60,7 @@ use kartik\time\TimePicker;
 			'filebrowserBrowseUrl' => Yii::getAlias('@web') . '/kcfinder/browse.php?type=files',
 			'filebrowserUploadUrl' => Yii::getAlias('@web') . '/kcfinder/upload.php?type=files',
 		],
-	]); 
+	]);
 	?>
 
     <div class="form-group">

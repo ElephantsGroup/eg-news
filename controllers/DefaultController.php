@@ -108,11 +108,15 @@ class DefaultController extends EGController
 			Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news', 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
 			Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news', 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
 
+			$date = new \DateTime('now');
+			$date->setTimezone(new \DateTimezone('Iran'));
+			$now = $date->format('Y-m-d H:m:s');
+
 			$begin = $this->getBeginDate($this->language, $begin_time);
 			$end = $this->getEndDate($this->language, $end_time);
 			$news_list = [];
 	//		$news = News::find()->where(['between', 'creation_time', $begin, $end])->all();
-			$news = News::find()->notEdited()->all();
+			$news = News::find()->where(['<=', 'publish_time' , $now ])->notEdited()->all();
 			foreach($news as $news_item)
 			{
 				$max_version_translation = NewsTranslation::find()->where(['news_id' => $news_item->id, 'language' => $this->language])->max('version');
