@@ -32,7 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
+		<?=
+		  //TODO: chech use Jdf for first time
+		  Jdf::jdate('Y/m/d H:i:s', (new \DateTime())->getTimestamp(), '', 'Iran', 'en');
+		?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

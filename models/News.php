@@ -159,6 +159,10 @@ class News extends \yii\db\ActiveRecord
 		$this->update_time = $date->format('Y-m-d H:i:s');
 		if($this->isNewRecord)
 			$this->creation_time = $date->format('Y-m-d H:i:s');
+		if($this->publish_time == null && empty($this->publish_time))
+			$this->publish_time = $date->format('Y-m-d H:i:s');
+		if($this->archive_time == null && empty($this->archive_time))
+				$this->archive_time = $date->format('Y-m-d H:i:s');
 		return parent::beforeSave($insert);
 	}
 
