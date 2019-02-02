@@ -40,7 +40,7 @@ class News extends \yii\db\ActiveRecord
 
 	public function init()
     {
-        self::$upload_path = str_replace('/backend', '', Yii::getAlias('@webroot')) . '/uploads/eg-news/news/';
+        self::$upload_path = str_replace('/backend', '', Yii::getAlias('@webroot')) . '/../uploads/eg-news/news/';
         self::$upload_url = str_replace('/backend', '', Yii::getAlias('@web')) . '/uploads/eg-news/news/';
         parent::init();
     }
