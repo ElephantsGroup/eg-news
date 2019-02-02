@@ -30,8 +30,8 @@ class NewsCategory extends \yii\db\ActiveRecord
 	
 	public function init()
     {
-        self::$upload_path = str_replace('/backend', '', Yii::getAlias('@webroot')) . '/uploads/eg-news/news-category/';
-        self::$upload_url = str_replace('/backend', '', Yii::getAlias('@web')) . '/uploads/eg-news/news-category/';
+        self::$upload_path = str_replace('/admin', '', Yii::getAlias('@webroot')) . '/uploads/eg-news/news-category/';
+        self::$upload_url = str_replace('/admin', '', Yii::getAlias('@web')) . '/uploads/eg-news/news-category/';
         parent::init();
     }
 
