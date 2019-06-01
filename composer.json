@@ -18,16 +18,17 @@
             "email": "arvin.firouzi@yahoo.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2": "*",
-        "elephantsgroup/eg-base": "~1",
-        "elephantsgroup/eg-stat": "~1",
-        "elephantsgroup/eg-like": "~1",
-        "elephantsgroup/eg-follow": "~1",
-        "elephantsgroup/eg-star-rating": "~1",
-        "elephantsgroup/eg-comment": "~1",
-        "elephantsgroup/eg-jdf": "~1",
-		"elephantsgroup/eg-jdate": "~1",
+        "elephantsgroup/eg-base": "dev-master",
+        "elephantsgroup/eg-stat": "dev-master",
+        "elephantsgroup/eg-like": "dev-master",
+        "elephantsgroup/eg-follow": "dev-master",
+        "elephantsgroup/eg-star-rating": "dev-master",
+        "elephantsgroup/eg-comment": "dev-master",
+        "elephantsgroup/eg-jdf": "dev-master",
+		"elephantsgroup/eg-jdate": "dev-master",
 		"kartik-v/yii2-widget-timepicker": "*",
         "2amigos/yii2-ckeditor-widget": "^1.0@dev",
         "elephantsGroup/eg-kcfinder": "dev-master"
