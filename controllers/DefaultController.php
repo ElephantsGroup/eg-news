@@ -4,6 +4,7 @@ namespace elephantsGroup\news\controllers;
 
 use Yii;
 //use yii\web\Controller;
+use yii\data\Pagination;
 use elephantsGroup\news\models\News;
 use elephantsGroup\news\models\NewsTranslation;
 use elephantsGroup\stat\models\Stat;
@@ -103,7 +104,7 @@ class DefaultController extends EGController
     public function actionIndex($lang = 'fa-IR', $begin_time = null, $end_time = null)
     {
 			Stat::setView('news', 'default', 'index');
-
+			$module = \Yii::$app->getModule('news');
 	        //$this->layout = '//creative-item';
 			Yii::$app->controller->addLanguageUrl('fa-IR', Yii::$app->urlManager->createUrl(['news', 'lang' => 'fa-IR']), (Yii::$app->controller->language !== 'fa-IR'));
 			Yii::$app->controller->addLanguageUrl('en', Yii::$app->urlManager->createUrl(['news', 'lang' => 'en']), (Yii::$app->controller->language !== 'en'));
@@ -117,8 +118,16 @@ class DefaultController extends EGController
 			$end = $this->getEndDate($this->language, $end_time);
 			$news_list = [];
 			//$news = News::find()->where(['between', 'creation_time', $begin, $end])->all();
-			$news = News::find()->where(['<=', 'publish_time' , $now ])->notEdited()->all();
-			foreach($news as $news_item)
+			$news = News::find()->where(['<=', 'publish_time' , $now ])->notEdited();
+			$countQuery = clone $news;
+
+			$pages = new Pagination(['totalCount' => $countQuery->count()]);
+			$pages->defaultPageSize = $module->page_size;
+			$models = $news->offset($pages->offset)
+				->limit($pages->limit)
+				->all();
+
+			foreach($models as $news_item)
 			{
 				$max_version_translation = NewsTranslation::find()->where(['news_id' => $news_item->id, 'language' => $this->language])->max('version');
 				$translation = NewsTranslation::findOne(array('news_id' => $news_item->id, 'language' => $this->language, 'version' => $max_version_translation));
@@ -138,7 +147,8 @@ class DefaultController extends EGController
 				'news' => $news_list,
 				'from' => $begin,
 				'to' => $end,
-				'language' => $this->language
+				'language' => $this->language,
+				'pages' => $pages
 			]);
     }
 

@@ -46,3 +46,7 @@ $service_id = array_keys($module_relation->services, 'News')[0];
 		</div><!-- /.container -->
 	</section>
 </div>
+<?php echo \yii\widgets\LinkPager::widget([
+    'pagination' => $pages,
+]);
+?>
