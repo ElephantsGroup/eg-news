@@ -31,7 +31,8 @@
 		"elephantsgroup/eg-jdate": "dev-master",
 		"kartik-v/yii2-widget-timepicker": "*",
         "2amigos/yii2-ckeditor-widget": "^1.0@dev",
-        "elephantsGroup/eg-kcfinder": "dev-master"
+        "elephantsGroup/eg-kcfinder": "dev-master",
+        "kosinix/grafika": "dev-master"
     },
     "config": {
         "process-timeout": 1500,

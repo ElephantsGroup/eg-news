@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			[
                 'attribute' => 'thumb',
-                'value' => News::$upload_url . $model->id . '/' . $model->thumb,
+                'value' => News::$upload_url . $model->id . '/' . $model->thumb_size['medium']['name'],
                 'format' => ['image'],
             ],
 			[

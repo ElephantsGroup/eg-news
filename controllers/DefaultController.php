@@ -135,7 +135,7 @@ class DefaultController extends EGController
 				{
 					$news_list[] = [
 					    'id' => $news_item['id'],
-	                    'thumb' => News::$upload_url . $news_item['id'] . '/' . $news_item['thumb'],
+	                    'thumb' => News::$upload_url . $news_item['id'] . '/' . $news_item->thumb_size['icon']['name'],
 	                    'title' => $translation->title,
 	                    'subtitle' => $translation->subtitle,
 	                    'intro' => $translation->intro
