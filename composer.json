@@ -30,7 +30,7 @@
         "elephantsgroup/eg-jdf": "dev-master",
 		"elephantsgroup/eg-jdate": "dev-master",
 		"kartik-v/yii2-widget-timepicker": "*",
-        "2amigos/yii2-ckeditor-widget": "^1.0@dev",
+        "elephantsgroup/eg-ckeditor-widget": "dev-master",
         "elephantsGroup/eg-kcfinder": "dev-master",
         "kosinix/grafika": "dev-master"
     },
