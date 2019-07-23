@@ -115,7 +115,7 @@ class CatController extends EGController
 		$begin = $this->getBeginDate($this->language, $begin_time);
 		$end = $this->getEndDate($this->language, $end_time);
 		$cat_list = [];
-//		$news = news::find()->where(['between', 'creation_time', $begin, $end])->all();
+		//		$news = news::find()->where(['between', 'creation_time', $begin, $end])->all();
 		$cat = NewsCategory::find()->all();
 		foreach($cat as $item)
 		{
@@ -129,6 +129,9 @@ class CatController extends EGController
                 ];
 			}
 		}
+
+		$this->title = Yii::t('config', 'Company Name') . ' - ' . Yii::t('app', 'News Category List');
+
 		return $this->render('index',[
 			'category' => $cat_list,
 			'from' => $begin,
@@ -164,6 +167,9 @@ class CatController extends EGController
               ];
           }
         }
+
+		$this->title = Yii::t('config', 'Company Name') . ' - ' . Yii::t('app', 'News Category') . ' - ' . $model->translationByLang->title;
+
         return $this->render('view', [
             'model' => $model,
             'news_list' => $news_list,

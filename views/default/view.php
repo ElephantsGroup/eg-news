@@ -17,7 +17,6 @@ $module_relation = \Yii::$app->getModule('service-relation');
 $service_id = array_keys($module_relation->services, 'News')[0];
 
 $lang = Yii::$app->language;
-$this->title = Yii::t('news', 'News id') . ' ' . $model->id;
 $translation = $model->translationByLang;
 if($translation && $translation->title)
 	$this->title = $translation->title;
